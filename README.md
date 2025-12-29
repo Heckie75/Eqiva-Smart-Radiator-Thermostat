@@ -10,7 +10,7 @@ Eqiva Smart Radiator Thermostat command line interface for Linux / Raspberry Pi 
 
 USAGE:   eqiva.py <mac_1/alias_1> [<mac_2/alias_2>] ... --<command_1> [<param_1> <param_2> ... --<command_2> ...]
          <mac_N>   : bluetooth mac address of thermostat
-         <alias_N> : you can use aliases instead of mac address if there is a ~/.known_eqiva file
+         <alias_N> : you can use aliases instead of mac address if there is a ~/.known_eqivas file
          <command> : a list of commands and parameters
 
 Basic commands:
@@ -25,14 +25,14 @@ Configuration commands:
  --program [<day>] [<temp>] [<hh:mm> <temp>] ...
                                  request all programs, programs of a weekday OR set program with max. 7 events.
                                  <day> must be one of 'mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun', 'weekend', 'work', 'everyday', 'today', 'tomorrow'
-                                 time must be in stepts of 10 minutes
+                                 time must be in steps of 10 minutes
  --offset <temp>                 set offset temperature from -3.5 to 3.5°C in steps of 0.5°C
  --comforteco <temp> <temp>      set comfort and eco temperature from 4.5 to 30.0°C in steps of 0.5°C
  --openwindow <temp> <minutes>   set temperature (4.5 to 30.0) and minutes (in steps of 5min, max. 995min) after open windows has been detected
  --lock <on|off>                 lock or unlock thermostat
 
 Setup commands:
- --scan                          scan for Eqiva Smart Radiotor Thermostats
+ --scan                          scan for Eqiva Smart Radiator Thermostats
  --aliases                       print known aliases from .known_eqivas file
  --reset                         perform factory reset
 
@@ -52,7 +52,7 @@ Other commands:
 The CLI / API is written in Python 3. It utilizes the Python module [bleak](https://github.com/hbldh/bleak) which can be installed as follows:
 
 ```
-$ pip3 install bleak
+$ pip3 install bleak==1.0.1
 ```
 
 Make sure that script is executable:
@@ -61,19 +61,19 @@ $ chmod +x eqiva.py
 ```
 
 ## Pairing
-Paring is not required if your thermostat asks for a 4-digit pin. However, after inserting battery, you must disable and re-enable Bluetooth in menu. Otherwise, device is not found via Bluetooth. After that you can immediately control it via BT.
+Pairing is not required if your thermostat asks for a 4-digit pin. However, after inserting the battery, you must disable and re-enable Bluetooth in the menu. Otherwise the device is not found via Bluetooth. After that you can immediately control it via BT.
 
-Thermostats with newer firmwares, e.g. 1.46 and above, ask for a 6-digit pin and pairing is required. This works for me:
+Thermostats with newer firmware, e.g. 1.46 and above, ask for a 6-digit pin and pairing is required. This works for me:
 
 * Step 1: open ```bluetoothctl```
-* Step 2: select bluetooth device (required in my setup * since a have two controllers, i.e. a build-in one and an external USB dongle)
+* Step 2: select bluetooth device (required in my setup since I have two controllers, i.e. a built-in one and an external USB dongle)
 * Step 3: connect to thermostat by entering mac address
 * Step 4: enter passkey
 * Step 5: disconnect and quit.
 
 The thermostat must be in pairing mode as well. The displayed 6 digit code must be used for pairing.
 
-Note: It seems that one and the same thermostat can be paired to multiple clients, e.g. your Smartphone, PCs etc.
+Note: It seems that the same thermostat can be paired to multiple clients, e.g. your smartphone, PCs etc.
 
 Example:
 ```
@@ -142,7 +142,7 @@ $ ./eqiva.py Wohnz --status --print
 ...
 ```
 
-Note, that I have just written ```Wohnz``` instead of the full name. The alias is like a pattern. Every line that matches in ```.known_eqivas``` will be connected. The format of the lines is the following:
+Note that I have just written ```Wohnz``` instead of the full name. The alias is like a pattern. Every line that matches in ```.known_eqivas``` will be connected. The format of the lines is the following:
 
 ```
 11:22:33:44:55:66[SPACES]+Name # Optional comment
@@ -157,17 +157,17 @@ Example:
 $ ./eqiva.py Wohnz --mode manual --temp 16.5 --status --print
 ```
 
-This command connects to the device with alias 'Wohnz'. Then it sends three commands and print gathered information:
+This command connects to the device with alias 'Wohnz'. Then it sends four commands and prints gathered information:
 1. Set thermostat to manual mode
 2. Set temperature to 16.5°C
 3. Request status
-4. Print gateherde information
+4. Print gathered information
 
 ## Basic commands
 ### Ask for help
 Type the following to get help for all commands
 ```
-$ ./mipow.py --help
+$ ./eqiva.py --help
 ...
 ```
 
@@ -178,14 +178,14 @@ Eqiva Smart Radiator Thermostat command line interface for Linux / Raspberry Pi 
 
 USAGE:   eqiva.py <mac_1/alias_1> [<mac_2/alias_2>] ... --<command_1> [<param_1> <param_2> ... --<command_2> ...]
          <mac_N>   : bluetooth mac address of thermostat
-         <alias_N> : you can use aliases instead of mac address if there is a ~/.known_eqiva file
+         <alias_N> : you can use aliases instead of mac address if there is a ~/.known_eqivas file
          <command> : a list of commands and parameters
 
  --mode <auto|manual>            set mode to auto or manual
 ```
 
-### Print status and synchroize time
-To print the status, you can use the ```--status```-command. It also synchronizes the time. Since it does not print the requested information you must also use the ```--print```-command to print the result to console.
+### Print status and synchronize time
+To print the status, you can use the ```--status``` command. It also synchronizes the time. Since it does not print the requested information, you must also use the ```--print``` command to print the result to the console.
 
 ```
 $ ./eqiva.py Wohnz --status --print
@@ -231,12 +231,12 @@ Set the temperature to 16.5°C:
 $ ./eqiva.py Wohnz --temp 16.5
 ```
 
-Set the temperature to temperature that has been configured to be the eco temperature:
+Set the temperature to the configured eco temperature:
 ```
 $ ./eqiva.py Wohnz --temp eco
 ```
 
-Set the temperature to temperature that has been configured to be the comfort temperature:
+Set the temperature to the configured comfort temperature:
 ```
 $ ./eqiva.py Wohnz --temp comfort
 ```
@@ -251,7 +251,7 @@ Turn the thermostat on (i.e. set temperature to 30.0°C)
 $ ./eqiva.py Wohnz --temp on
 ```
 
-Note: The thermostat should be in auto mode. Otherwise ,the target temperature will change after the next event of the program has been reached.
+Note: The thermostat should be in auto mode. Otherwise, the target temperature will change when the next scheduled program event occurs.
 
 ### Set mode
 Set the temperature to manual:
@@ -276,7 +276,7 @@ or only
 $ ./eqiva.py Wohnz --boost
 ```
 
-It runs for 5 minutes. If you want to stop boost mode to the following:
+It runs for 5 minutes. If you want to stop boost mode, do the following:
 ```
 $ ./eqiva.py Wohnz --boost off
 ```
@@ -309,7 +309,7 @@ Type the following to set a program for a day:
 $ ./eqiva.py Wohnz --program mon 17.5 07:00 20.5 21:00 17.5
 ```
 
-Note: For easy changing programs you can query the current configuration and output it in command-style like this
+Note: For easier program changes, you can query the current configuration and output it in command-style like this
 ```
 $ ./eqiva.py Wohnz --program --commands
 
@@ -324,26 +324,26 @@ Thermostat 00:1A:22:0A:91:CF
 ```
 
 ### Offset temperature
-To set the offset temperature enter this:
+To set the offset temperature, enter this:
 ```
 $ ./eqiva.py Wohnz --offset 0.0
 ```
 
 ### Comfort and eco temperature
-To set the offset temperature enter this:
+To set the comfort and eco temperatures, enter this:
 ```
 $ ./eqiva.py Wohnz --comforteco 20.5 16.5
 ```
 
 ### Open window configuration
-To configure the open window mode enter this:
+To configure the open-window mode, enter this:
 ```
 $ ./eqiva.py Wohnz --openwindow 5.0 10
 ```
 5.0 is the temperature which is set for 10 minutes after an open window has been detected.
 
 ### Lock / unlock
-To lock thethermostat enter this:
+To lock the thermostat, enter this:
 ```
 $ ./eqiva.py Wohnz --lock on
 ```
@@ -361,7 +361,7 @@ $ ./eqiva.py Wohnz --reset
 
 ## Device information
 ### Name, vendor, serial
-To request name, vendor and serial enter the following:
+To request the name, vendor, and serial, enter the following:
 ```
 $ ./eqiva.py Wohnz --name --vendor --serial --print
 
@@ -372,7 +372,7 @@ Thermostat 00:1A:22:XX:XX:XX
 ```
 
 ### Dump all information of your thermostat
-If you want get all information of your thermostat you can use the ```--dump```-command.
+If you want to get all information of your thermostat, you can use the ```--dump``` command.
 
 ```
 $ ./eqiva.py Wohnz --dump --print
