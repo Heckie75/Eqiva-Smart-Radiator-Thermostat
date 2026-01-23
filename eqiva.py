@@ -365,7 +365,7 @@ class Thermostat(BleakClient, Listener):
 
         super().__init__(address, timeout=30.0)
 
-        self.name: str = None
+        self.deviceName: str = None
         self.vendor: str = None
         self.serialNumber: str = None
         self.firmware: float = None
@@ -658,9 +658,9 @@ class Thermostat(BleakClient, Listener):
 
         LOGGER.info(f"{self.address}: request name")
         name = await self.read_gatt_char(Thermostat.CHARACTERISTIC_DEVICE_NAME_STRING)
-        self.name = name.decode()
-        LOGGER.info(f"{self.address}: name is {self.name}")
-        return self.name
+        self.deviceName = name.decode()
+        LOGGER.info(f"{self.address}: name is {self.deviceName}")
+        return self.deviceName
 
     async def requestVendor(self) -> str:
 
@@ -674,7 +674,7 @@ class Thermostat(BleakClient, Listener):
 
         return {
             "mac": self.address,
-            "name": self.name,
+            "name": self.deviceName,
             "vendor": self.vendor,
             "serialNumber": self.serialNumber,
             "firmware": self.firmware,
@@ -693,7 +693,7 @@ class Thermostat(BleakClient, Listener):
 
         programs = ", ".join(
             [f"{Program.DAYS[d]}={str(p)}" for d, p in enumerate(self.programs) if p])
-        return f"Thermostat(address={self.address}, name={self.name}, vendor={self.vendor}, serialNo={self.serialNumber}, firmware={self.firmware}, mode={str(self.mode)}, temperature={str(self.temperature)}, valve={str(self.valve)}%, vacation={str(self.vacation)}, programs=Programs({programs}), openWindowConfig={str(self.openWindowConfig)}, comfortTemperature={str(self.comfortTemperature)}, ecoTemperature={str(self.ecoTemperature)}, offsetTemperature={str(self.offsetTemperature)})"
+        return f"Thermostat(address={self.address}, name={self.deviceName}, vendor={self.vendor}, serialNo={self.serialNumber}, firmware={self.firmware}, mode={str(self.mode)}, temperature={str(self.temperature)}, valve={str(self.valve)}%, vacation={str(self.vacation)}, programs=Programs({programs}), openWindowConfig={str(self.openWindowConfig)}, comfortTemperature={str(self.comfortTemperature)}, ecoTemperature={str(self.ecoTemperature)}, offsetTemperature={str(self.offsetTemperature)})"
 
 
 class Alias():
@@ -1327,8 +1327,8 @@ USAGE:   eqiva.py <mac_1/alias_1> [<mac_2/alias_2>] ... --<command_1> [<param_1>
             s = list()
             s.append("")
             s.append("Thermostat %s" % thermostat.address)
-            if thermostat.name and not command_style:
-                s.append("  Name:                %s" % thermostat.name)
+            if thermostat.deviceName and not command_style:
+                s.append("  Name:                %s" % thermostat.deviceName)
 
             if thermostat.vendor and not command_style:
                 s.append("  Vendor:              %s" % thermostat.vendor)
